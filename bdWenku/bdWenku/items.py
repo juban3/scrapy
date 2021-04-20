@@ -9,4 +9,13 @@ import scrapy
 class BdwenkuItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    pass
+    '''
+        设置爬去的数据
+        问题
+        选项
+        答案
+        ??
+    '''
+    question = scrapy.Field()
+    option = scrapy.Field()
+    #pass

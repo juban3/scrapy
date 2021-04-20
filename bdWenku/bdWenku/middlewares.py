@@ -5,14 +5,25 @@
 
 from scrapy import signals
 
+'''
+添加代理中间件类RotateUserAgentMiddleware
+添加用户池
+'''
+import random
+from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
+from bdWenku.bdWenku.settings import USER_AGENT_LIST
+
+
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
 
 
-class BdwenkuSpiderMiddleware:
+class BdwenkuSpiderMiddleware(UserAgentMiddleware):
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the spider middleware does not modify the
     # passed objects.
+
+
 
     @classmethod
     def from_crawler(cls, crawler):
@@ -68,17 +79,28 @@ class BdwenkuDownloaderMiddleware:
         crawler.signals.connect(s.spider_opened, signal=signals.spider_opened)
         return s
 
-    def process_request(self, request, spider):
-        # Called for each request that goes through the downloader
-        # middleware.
+    '''
 
-        # Must either:
-        # - return None: continue processing this request
-        # - or return a Response object
-        # - or return a Request object
-        # - or raise IgnoreRequest: process_exception() methods of
-        #   installed downloader middleware will be called
-        return None
+        def process_request(self, request, spider):
+            # Called for each request that goes through the downloader
+            # middleware.
+
+            # Must either:
+            # - return None: continue processing this request
+            # - or return a Response object
+            # - or return a Request object
+            # - or raise IgnoreRequest: process_exception() methods of
+            #   installed downloader middleware will be called
+            return None
+    用户代理中间件（处于下载中间件位置）
+    改写请求下载头中间件        
+    '''
+
+    def process_request(self, request, spider):
+        user_agent = random.choice(USER_AGENT_LIST)
+        if user_agent:
+            request.headers.setdefault('User-Agent', user_agent)
+            print(f"User-Agent:{user_agent}")
 
     def process_response(self, request, response, spider):
         # Called with the response returned from the downloader.
