@@ -11,11 +11,13 @@ class BdwenkuItem(scrapy.Item):
     # name = scrapy.Field()
     '''
         设置爬去的数据
+        书名
+        链接
         问题
         选项
         答案
         ??
     '''
-    question = scrapy.Field()
-    option = scrapy.Field()
+    book_name = scrapy.Field()
+    url = scrapy.Field()
     #pass
