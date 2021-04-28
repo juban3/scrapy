@@ -3,22 +3,23 @@ import scrapy
 from bdWenku.bdWenku.data import mysqldb
 from bdWenku.bdWenku.items import BdwenkuItem
 
+
 class WenkuSpider(scrapy.Spider):
     name = 'wenku'
-    allowed_domains = ['wenku.baidu.com']
-    start_urls = ['http://wenku.baidu.com/']
-
+    allowed_domains = ['wenku.baidu.com',]
+#    start_urls = ['http://wenku.baidu.com/']
     def start_requests(self):
-        for books in mysqldb.results:
-            url = 'https://wenku.baidu.com/search?word={}  {}阅读题&ie=utf-8'.format(books[0],books[1])
+        books_lists = mysqldb.process_getbook()
+        for books_list in books_lists:
+            url = 'https://wenku.baidu.com/search?word={}  {}阅读题&ie=utf-8'.format(books_list[0],books_list[1])
             # 交给调度器
             print('url='+url)
             yield scrapy.Request(
                 url=url,
-                callback=self.parse
+                callback=self.parse_getFileUrl
             )
 
-    def parse(self, response):
+    def parse_getFileUrl(self, response):
         #文件信息
         file_list = response.xpath('''//*[@id="app"]/div/dl''')
         #url_xpath = "//*[@id="app"]/div/dl/dt/p[@class="fl"]/a[1]"
@@ -33,4 +34,11 @@ class WenkuSpider(scrapy.Spider):
 
             # 把爬取的数据交给管道文件pipeline处理
             # 生成器
-            yield item
+        yield scrapy.Request(
+            url=item["url"],
+            callback=self.parse_wgetfile
+        )
+
+
+    def parse_wgetfile(self, response):
+        pass
