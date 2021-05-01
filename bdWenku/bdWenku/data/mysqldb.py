@@ -13,7 +13,7 @@ class mysqldb(object):
         )
 
         #创建游标
-        cursor = db.cursor()
+        self.cursor = db.cursor()
 
     def process_getbook(self):
 #sql语句

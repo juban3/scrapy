@@ -8,9 +8,11 @@ class WenkuSpider(scrapy.Spider):
     name = 'wenku'
     allowed_domains = ['wenku.baidu.com',]
 #    start_urls = ['http://wenku.baidu.com/']
+
+    books_lists = mysqldb
     def start_requests(self):
-        books_lists = mysqldb.process_getbook()
-        for books_list in books_lists:
+        print(self.name)
+        for books_list in self.books_lists.mysqldb():
             url = 'https://wenku.baidu.com/search?word={}  {}阅读题&ie=utf-8'.format(books_list[0],books_list[1])
             # 交给调度器
             print('url='+url)
