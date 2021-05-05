@@ -17,7 +17,9 @@ NEWSPIDER_MODULE = 'bdWenku.spiders'
 #USER_AGENT = 'bdWenku (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+#ROBOTSTXT_OBEY = True
+#遵守robots 规则
+
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -61,7 +63,6 @@ ROBOTSTXT_OBEY = True
 '''
 DOWNLOADER_MIDDLEWARES = {
  'scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware' : None,
-    'qiubai_proj.middlewares.RotateUserAgentMiddleware' :400,
 }
 
 

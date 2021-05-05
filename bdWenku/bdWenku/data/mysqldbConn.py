@@ -1,10 +1,10 @@
 import pymysql
 
-class mysqldb(object):
+class mysqldbConn(object):
     def __init__(self):
 
     #连接数据库
-        db = pymysql.connect(
+        self.db = pymysql.connect(
             host = '106.14.31.146',
             port = 3306,
             user = 'scrapy',
@@ -13,7 +13,7 @@ class mysqldb(object):
         )
 
         #创建游标
-        self.cursor = db.cursor()
+        self.cursor = self.db.cursor()
 
     def process_getbook(self):
 #sql语句
