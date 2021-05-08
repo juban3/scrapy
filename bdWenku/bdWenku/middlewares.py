@@ -2,8 +2,13 @@
 #
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
+import time
+from builtins import classmethod
 
+from pip._internal.utils import logging
 from scrapy import signals
+
+from bdWenku.settings import USER_AGENT_LIST
 
 '''
 添加代理中间件类RotateUserAgentMiddleware
@@ -11,7 +16,6 @@ from scrapy import signals
 '''
 import random
 from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
-from bdWenku.bdWenku.settings import USER_AGENT_LIST
 
 
 # useful for handling different item types with a single interface
@@ -79,28 +83,20 @@ class BdwenkuDownloaderMiddleware:
         crawler.signals.connect(s.spider_opened, signal=signals.spider_opened)
         return s
 
-    '''
-
-        def process_request(self, request, spider):
-            # Called for each request that goes through the downloader
-            # middleware.
-
-            # Must either:
-            # - return None: continue processing this request
-            # - or return a Response object
-            # - or return a Request object
-            # - or raise IgnoreRequest: process_exception() methods of
-            #   installed downloader middleware will be called
-            return None
-    用户代理中间件（处于下载中间件位置）
-    改写请求下载头中间件        
-    '''
 
     def process_request(self, request, spider):
-        user_agent = random.choice(USER_AGENT_LIST)
-        if user_agent:
-            request.headers.setdefault('User-Agent', user_agent)
-            print(f"User-Agent:{user_agent}")
+        # Called for each request that goes through the downloader
+        # middleware.
+
+        # Must either:
+        # - return None: continue processing this request
+        # - or return a Response object
+        # - or return a Request object
+        # - or raise IgnoreRequest: process_exception() methods of
+        #   installed downloader middleware will be called
+        return None
+
+
 
     def process_response(self, request, response, spider):
         # Called with the response returned from the downloader.
@@ -123,3 +119,39 @@ class BdwenkuDownloaderMiddleware:
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
+class RotateUserAgentMiddleware(UserAgentMiddleware):
+    '''
+    用户代理中间件（处于下载中间件位置）
+    需要在setting   DOWNLOADER_MIDDLEWARES中进行开启
+    '''
+
+
+    def process_request(self, request, spider):
+        user_agent = random.choice(USER_AGENT_LIST)
+        request.headers['User-Agent']= user_agent
+        print("User-Agent:",{user_agent})
+        return None
+
+class my_proxy(object):
+    #ip池
+    def process_request(self,request,spider):
+        request.meta['proxy'] = 'xxxxxip'
+        #未完整，待补充；setting未开启
+
+class RandomDelayMiddleware(object):
+    #设置爬虫频率
+    def __init__(self, delay):
+        self.delay = delay
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        delay = crawler.spider.settings.get("RANDOM_DELAY", 10)
+        if not isinstance(delay, int):
+            raise ValueError("RANDOM_DELAY need a int")
+        return cls(delay)
+
+    def process_request(self, request, spider):
+        delay = random.randint(0, self.delay)
+        logging.debug("### random delay: %s s ###" % delay)
+        time.sleep(delay)
