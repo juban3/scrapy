@@ -6,7 +6,7 @@
 #     https://docs.scrapy.org/en/latest/topics/settings.html
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
-
+#token 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
 BOT_NAME = 'bdWenku'
 
 SPIDER_MODULES = ['bdWenku.spiders']
@@ -27,7 +27,7 @@ NEWSPIDER_MODULE = 'bdWenku.spiders'
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-#DOWNLOAD_DELAY = 3
+DOWNLOAD_DELAY = 3
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
@@ -50,19 +50,13 @@ NEWSPIDER_MODULE = 'bdWenku.spiders'
 #    'bdWenku.middlewares.BdwenkuSpiderMiddleware': 543,
 #}
 
-# Enable or disable downloader middlewares
+# Enable or disable downloader middlewares启用或禁用中间件
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'bdWenku.middlewares.BdwenkuDownloaderMiddleware': 543,
-#}
-
-
-
-'''
-设置用户请求池如下
-'''
 DOWNLOADER_MIDDLEWARES = {
- 'scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware' : None,
+      #格式：项目.middlewares.中间件类
+      'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware': None,
+      'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+      'bdWenku.middlewares.RotateUserAgentMiddleware': 543,
 }
 
 

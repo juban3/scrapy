@@ -5,10 +5,10 @@ class mysqldbConn(object):
 
     #连接数据库
         self.db = pymysql.connect(
-            host = '106.14.31.146',
+            host = '127.0.0.1',
             port = 3306,
-            user = 'scrapy',
-            passwd = 'Scrapy@123',
+            user = 'root',
+            passwd = 'han105139',
             db = 'read_books'
         )
 
