@@ -1,23 +1,26 @@
 import pymysql
+from scrapy import crawler
 
-class mysqldbConn(object):
+from bdWenku import settings
+
+
+class mysqldb(object):
     def __init__(self):
-
     #连接数据库
-        self.db = pymysql.connect(
-            host = '127.0.0.1',
-            port = 3306,
-            user = 'root',
-            passwd = 'han105139',
-            db = 'read_books'
-        )
+        db = pymysql.connect(
+                host = settings.MYSQL_HOST,
+                port=settings.MYSQL_PORT,
+                user=settings.MYSQL_USER,
+                password=settings.MYSQL_PASSWORD,
+                database=settings.MYSQL_DATABASE
+            )
 
         #创建游标
-        self.cursor = self.db.cursor()
+        self.cursor = db.cursor()
 
     def process_getbook(self):
 #sql语句
-        sql = 'select bookName,edition from books;'
+        sql = 'select id,bookName,edition,author,press from books;'
         self.cursor.execute(sql)
 
         try:
@@ -39,7 +42,7 @@ class mysqldbConn(object):
             print("Error: unable to fetch data")
 
         # 关闭数据库连接
-        self.db.close()
+        self.cursor.close()
         return results
 
 
