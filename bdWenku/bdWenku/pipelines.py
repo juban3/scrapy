@@ -47,7 +47,7 @@ class MysqlPipeline():
         data = dict(item)
         keys = ', '.join(data.keys())
         values = ', '.join(['% s'] * len(data))
-        sql = 'insert into % s (% s) values (% s)' % (item.table, keys, values)
+        sql = 'insert into book_file (%s) values (%s)' % ( keys, values)
         self.cursor.execute(sql, tuple(data.values()))
         self.db.commit()
         return item

@@ -20,7 +20,7 @@ class mysqldb(object):
 
     def process_getbook(self):
 #sql语句
-        sql = 'select id,bookName,edition,author,press from books;'
+        sql = 'select id,bookName,edition,author,press,must from books;'
         self.cursor.execute(sql)
 
         try:
@@ -29,15 +29,6 @@ class mysqldb(object):
 
             # 获取所有记录列表
             results = self.cursor.fetchall()
-            '''
-            for row in results:
-                book_name = row[0]
-                deition = row[1]
-        
-                # 打印结果
-                print("book_name=%s,deition=%s" % \
-                      (book_name, deition))
-            '''
         except:
             print("Error: unable to fetch data")
 

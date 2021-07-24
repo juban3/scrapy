@@ -9,11 +9,9 @@ import scrapy
 class BdwenkuItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    '''
-        文件名
-        文件链接
 
-    '''
     file_name = scrapy.Field()
+    file_code = scrapy.Field()
     url = scrapy.Field()
     book_id = scrapy.Field()
+    must = scrapy.Field()

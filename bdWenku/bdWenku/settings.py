@@ -18,6 +18,9 @@ MYSQL_PORT = 3306
 MYSQL_USER = 'root'
 MYSQL_PASSWORD = 'han105139'
 
+PROXY_URL = 'http://192.168.101.35:5555/random'
+#PROXY_URL = 'http://127.0.0.1:5555/random'
+
 #文件下载地址
 FILES_STORE = '/Users/h/Documents/k12/阅读必读书目'
 
